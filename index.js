@@ -13,8 +13,6 @@ setInterval(() => {
         if (err) {
             bot.logErrorToAdmin(err);
             return;
-        } else {
-            // bot.logMessageToAdmin(`HH Parsed, total length: ${articles.length}`);
         }
 
         articles.forEach(article => {
@@ -24,8 +22,8 @@ setInterval(() => {
                     key,
                     data: article
                 }).save().then(
-                    model => bot.postVacancy(HhAdapter.parseItem(article)),
-                    err => console.log('already posted', key)
+                    model => HhAdapter.parseItem(article).then(bot.postVacancy),
+                    () => {}
                 );
                 queue.push(promise);
             }
@@ -36,8 +34,6 @@ setInterval(() => {
         if (err) {
             bot.logErrorToAdmin(err);
             return;
-        } else {
-            // bot.logMessageToAdmin(`Moikrug parsed, total length: ${articles.length}`);
         }
 
         articles.forEach(article => {
@@ -47,8 +43,8 @@ setInterval(() => {
                     key,
                     data: article
                 }).save().then(
-                    model => bot.postVacancy(MoikrugAdapter.parseItem(article)),
-                    err => console.log('already posted', key)
+                    model => MoikrugAdapter.parseItem(article).then(bot.postVacancy),
+                    () => {}
                 );
                 queue.push(promise);
             }
