@@ -1,0 +1,30 @@
+{
+  "name": "js_jobs_bot",
+  "version": "1.0.0",
+  "description": "Javascript jobs aggregator bot",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "feed-read": "0.0.1",
+    "mongoose": "^4.11.9",
+    "parse5": "^3.0.2",
+    "request": "^2.81.0",
+    "sanitize-html": "^1.14.1",
+    "slimbot": "^0.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "js",
+    "jobs",
+    "bot",
+    "telegram"
+  ],
+  "author": "risentveber@gmail.com",
+  "license": "ISC"
+}
