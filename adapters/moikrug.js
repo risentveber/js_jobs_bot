@@ -1,13 +1,8 @@
-const Az = require('az');
 const request = require('superagent');
-const jsdom = require("jsdom");
+const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
-const htmlToText = require('html-to-text');
-
-function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-}
-
+const { getTags } = require('../lib/tagger');
+const { render } = require('../lib/render');
 
 function parseItem(item) {
 
@@ -25,16 +20,17 @@ function parseItem(item) {
                 const element = dom.window.document.querySelector(".vacancy_description");
                 const salary =  dom.window.document.querySelector(".salary").textContent;
                 const location =  dom.window.document.querySelector(".location").textContent;
+                const title =  dom.window.document.querySelector(".company_name").textContent;
                 const pureContent = element.textContent;
-                const formattedContent = htmlToText.fromString(element.innerHTML);
-                const tokens = Az.Tokens(pureContent).done();
-                const tags = tokens.filter(t => t.subType && t.subType.toString() === 'LATIN' && t.type.toString() === 'WORD')
-                    .map(t => '#' + t.toString().replace('-', '_')).filter(onlyUnique);
-                if (tags.length <= 35) {
-                    resolve(`#${location}\n${salary}\n${tags.join(' ')}\n<pre>${formattedContent}</pre>\n${item.link}`);
-                } else {
-                    resolve(`#${location}\n${salary}\n<pre>${formattedContent}</pre>\n${item.link}`);
-                }
+
+                resolve(render({
+                    tags: getTags(pureContent),
+                    salary: `ЗП: ${salary}`,
+                    location,
+                    title,
+                    link: item.link,
+                    description: element.innerHTML
+                }))
             });
     });
 }
@@ -43,7 +39,7 @@ function getKey(item) {
     return item.link;
 }
 
-function isValid(item) {
+function isValid() {
     return true
 }
 

@@ -41,7 +41,7 @@ function logMessageToAdmin(message) {
 }
 
 function postVacancy(message) {
-    bot.sendMessage(config.TARGET_CHANNEL, `<b>Вакансия</b>\n${message}`,
+    bot.sendMessage(config.TARGET_CHANNEL, message,
         { parse_mode: 'HTML', disable_web_page_preview: true }
         );
 }

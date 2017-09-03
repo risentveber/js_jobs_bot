@@ -8,7 +8,7 @@ const { FeedItemModel } = require('./lib/models');
 let queue;
 
 setInterval(() => {
-    let queue = [];
+    queue = [];
     feed(config.HH_FEED, function (err, articles) {
         if (err) {
             bot.logErrorToAdmin(err);
