@@ -29,7 +29,8 @@ function parseItem(item) {
                     location,
                     title,
                     link: item.link,
-                    description: element.innerHTML
+                    description: element.innerHTML,
+                    important: Array.from(element.querySelectorAll('strong')).map(e => e.textContent)
                 }))
             });
     });

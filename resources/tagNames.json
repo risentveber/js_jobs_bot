@@ -1,5 +1,7 @@
 {
   "ror": "Ruby_on_Rails",
+  "rubyonrails": "Ruby_on_Rails",
+  "ruby_on_rails": "Ruby_on_Rails",
   "js": "JS",
   "javascript": "JS",
   "sql": "SQL",
@@ -40,7 +42,9 @@
   "nosql": "NoSQL",
   "backend": "Backend",
   "бэкенд": "Backend",
+  "бэкэнд": "Backend",
   "frontend": "Frontend",
+  "front_end": "Frontend",
   "front": "Frontend",
   "фронтенд": "Frontend",
   "фронтэнд": "Frontend",
@@ -49,6 +53,7 @@
   "mean": "MEAN",
   "pgsql": "PostgreSQL",
   "postgresql": "PostgreSQL",
+  "postgres": "PostgreSQL",
   "fullstack": "Fullstack",
   "stack": "Fullstack",
   "фуллстек": "Fullstack",
@@ -90,11 +95,13 @@
   "java": "Java",
   "rest": "REST",
   "restfull": "REST",
+  "restful": "REST",
   "soap": "SOAP",
   "nginx": "Nginx",
   "apache": "Apache",
   "docker": "Docker",
   "express": "ExpressJS",
+  "expressjs": "ExpressJS",
   "meteor": "MeteorJS",
   "typescript": "Typescript",
   "coffescript": "Coffescript",
@@ -104,5 +111,7 @@
   "redux": "Redux",
   "pixi": "PixiJS",
   "svg": "SVG",
-  "spa": "SPA"
+  "spa": "SPA",
+  "canvas": "Canvas",
+  "graphql": "GraphQL"
 }

@@ -35,7 +35,8 @@ function parseItem(item) {
                     salary: `ЗП: ${salary.split(': ')[1] || salary}`,
                     tags,
                     description: element.innerHTML,
-                    link: item.link
+                    link: item.link,
+                    important: Array.from(element.querySelectorAll('strong')).map(e => e.textContent)
                 }))
             });
     });
