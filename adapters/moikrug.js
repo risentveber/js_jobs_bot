@@ -18,7 +18,8 @@ function parseItem(item) {
 
                 const dom = new JSDOM(res.text);
                 const element = dom.window.document.querySelector(".vacancy_description");
-                const salary =  dom.window.document.querySelector(".salary").textContent;
+                const salaryElem =  dom.window.document.querySelector(".footer_meta .salary");
+                const salary = salaryElem ? salaryElem.textContent : 'Не указана.';
                 const location =  dom.window.document.querySelector(".location").textContent;
                 const title =  dom.window.document.querySelector(".company_name").textContent;
                 const pureContent = element.textContent;

@@ -1,0 +1,6 @@
+{
+  "name": "js_jobs_bot",
+  "script": "index.js",
+  "instances": 1,
+  "merge_logs": true
+}
