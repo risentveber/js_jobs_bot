@@ -10,7 +10,7 @@ const bot = new Slimbot(config.TELEGRAM_API_KEY);
     'callback_query',
     'inline_query',
     'chosen_inline_result',
-].forEach(type => bot.on(msgType, msg => console.log(msgType, msg)));
+].forEach(msgType => bot.on(msgType, msg => console.log(msgType, msg)));
 
 
 bot.startPolling();
