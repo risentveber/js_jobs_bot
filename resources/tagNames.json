@@ -119,6 +119,7 @@
   "memchache": "Memchached",
   "memchached": "Memchached",
   "aws": "AWS",
+  "amazon": "AWS",
   "ml": "ML",
   "nlp": "NLP",
   "heroku": "Heroku",
@@ -138,5 +139,6 @@
   "ramda": "Ramda",
   "lodash": "Lodash",
   "mocha": "Mocha",
-  "jest": "Jest"
+  "jest": "Jest",
+  "indexeddb": "IndexedDB"
 }

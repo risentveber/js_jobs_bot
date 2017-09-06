@@ -2,6 +2,7 @@ const request = require('superagent');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { getTags } = require('../lib/tagger');
+const { getJobType } = require('../lib/jobType');
 const { render } = require('../lib/render');
 
 function parseItem(item) {
@@ -36,6 +37,7 @@ function parseItem(item) {
                     tags,
                     description: element.innerHTML,
                     link: item.link,
+                    jobType: getJobType(pureContent),
                     important: Array.from(element.querySelectorAll('strong')).map(e => e.textContent)
                 }))
             });

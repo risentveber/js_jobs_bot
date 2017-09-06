@@ -2,6 +2,7 @@ const request = require('superagent');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { getTags } = require('../lib/tagger');
+const { getJobType } = require('../lib/jobType');
 const { render } = require('../lib/render');
 
 function parseItem(item) {
@@ -22,6 +23,7 @@ function parseItem(item) {
                 const salary = salaryElem ? salaryElem.textContent : 'Не указана.';
                 const location =  dom.window.document.querySelector(".location").textContent;
                 const title =  dom.window.document.querySelector(".company_name").textContent;
+                const titleFooter =  dom.window.document.querySelector(".footer_meta").textContent;
                 const pureContent = element.textContent;
 
                 resolve(render({
@@ -31,6 +33,7 @@ function parseItem(item) {
                     title,
                     link: item.link,
                     description: element.innerHTML,
+                    jobType: getJobType(titleFooter),
                     important: Array.from(element.querySelectorAll('strong')).map(e => e.textContent)
                 }))
             });
