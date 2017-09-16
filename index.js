@@ -5,51 +5,38 @@ const MoikrugAdapter = require('./adapters/moikrug');
 const bot = require('./bot');
 const { FeedItemModel } = require('./lib/models');
 
-let queue;
+function processFeed(articles, adapter) {
+  articles.forEach(article => {
+    if (adapter.isValid((article))) {
+      const key = adapter.getKey(article);
+      new FeedItemModel({
+        key,
+        data: article
+      }).save().then(
+        model => adapter.parseItem(article).then(bot.postVacancy),
+        () => {}
+      );
+    }
+  });
+}
 
 setInterval(() => {
-    queue = [];
-    feed(config.HH_FEED, function (err, articles) {
+    feed(config.HH_FEED, (err, articles) =>{
         if (err) {
-            bot.logErrorToAdmin(err);
+            bot.logMessageToAdmin(err);
+            return;
+        }
+        processFeed(articles, HhAdapter);
+    });
+
+    feed(config.MOIKRUG_FEED, (err, articles) => {
+        if (err) {
+            bot.logMessageToAdmin(err);
             return;
         }
 
-        articles.forEach(article => {
-            if (HhAdapter.isValid((article))) {
-                const key = HhAdapter.getKey(article);
-                const promise = new FeedItemModel({
-                    key,
-                    data: article
-                }).save().then(
-                    model => HhAdapter.parseItem(article).then(bot.postVacancy),
-                    () => {}
-                );
-                queue.push(promise);
-            }
-        });
+        processFeed(articles, MoikrugAdapter);
     });
-
-    feed(config.MOIKRUG_FEED, function (err, articles) {
-        if (err) {
-            bot.logErrorToAdmin(err);
-            return;
-        }
-
-        articles.forEach(article => {
-            if (MoikrugAdapter.isValid((article))) {
-                const key = MoikrugAdapter.getKey(article);
-                const promise = new FeedItemModel({
-                    key,
-                    data: article
-                }).save().then(
-                    model => MoikrugAdapter.parseItem(article).then(bot.postVacancy),
-                    () => {}
-                );
-                queue.push(promise);
-            }
-        });
-    });
-}, 5000 * 60);
+}, config.REQUEST_PERIOD_TIME);
 
 
