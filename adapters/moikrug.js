@@ -22,7 +22,8 @@ function parseItem(item) {
                 const salaryElem =  dom.window.document.querySelector(".footer_meta .salary");
                 const salary = salaryElem ? salaryElem.textContent : 'Не указана.';
                 const locationElem =  dom.window.document.querySelector(".footer_meta .location");
-                const location = locationElem && locationElem.textContent;
+                const locationWords = (locationElem && locationElem.textContent || '').split(', ');
+
                 const title =  dom.window.document.querySelector(".company_name").textContent;
                 const titleFooter =  dom.window.document.querySelector(".footer_meta").textContent;
                 const pureContent = element.textContent;
@@ -30,7 +31,7 @@ function parseItem(item) {
                 resolve(render({
                     tags: getTags(pureContent),
                     salary: `ЗП: ${salary}`,
-                    location,
+                    location: locationWords[locationWords.length - 1],
                     title,
                     link: item.link,
                     description: element.innerHTML,

@@ -2,5 +2,6 @@
   "name": "js_jobs_bot",
   "script": "index.js",
   "instances": 1,
-  "merge_logs": true
+  "merge_logs": true,
+  "log_date_format" : "YYYY-MM-DD HH:mm Z"
 }

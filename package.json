@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Javascript jobs aggregator bot",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/risentveber/js_jobs_bot"
+  },
   "directories": {
     "lib": "lib"
   },
