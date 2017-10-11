@@ -4,5 +4,5 @@ ssh rs "
 . ~/.nvm/nvm.sh
 cd /var/www/js_jobs_bot/
 mv prod-config.json config.json
-npm i && pm2 startOrGracefulReload processes.json
+npm i && pm2 restart processes.json
 "g

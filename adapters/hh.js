@@ -25,8 +25,9 @@ function parseItem(item) {
                 }
 
                 const dom = new JSDOM(res.text);
-                const element = dom.window.document.querySelector('.b-vacancy-desc-wrapper');
+                const element = dom.window.document.querySelector('.b-vacancy-desc-wrapper') || dom.window.document.querySelector('.b-vp-content');
                 const title = dom.window.document.querySelector('.companyname').textContent;
+                if (!element) { console.log('error link', item.link)}
                 const pureContent = element.textContent;
                 const tags = getTags(pureContent);
 

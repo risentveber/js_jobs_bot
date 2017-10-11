@@ -2,7 +2,7 @@ const Slimbot = require('slimbot');
 const config = require('./config.json');
 const bot = new Slimbot(config.TELEGRAM_API_KEY);
 
-bot.startPolling();
+//bot.startPolling();
 
 function logMessageToAdmin(message, type='Error') {
     bot.sendMessage(config.ADMIN_USER, `<b>${type}</b>\n<code>${message}</code>`, {
