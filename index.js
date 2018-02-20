@@ -13,7 +13,9 @@ function processFeed(articles, adapter) {
         key,
         data: article
       }).save().then(
-        model => adapter.parseItem(article).then(bot.postVacancy),
+        model => adapter.parseItem(article).then(res => {
+          return bot.postVacancy(res).catch(e => console.error(new Date(), e.toString(), res));
+        }),
         () => {}
       );
     }

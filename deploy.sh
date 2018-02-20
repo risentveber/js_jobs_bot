@@ -5,4 +5,4 @@ ssh rs "
 cd /var/www/js_jobs_bot/
 mv prod-config.json config.json
 npm i && pm2 restart processes.json
-"g
+"

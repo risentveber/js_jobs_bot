@@ -21,7 +21,8 @@
     "request": "^2.81.0",
     "sanitize-html": "^1.14.1",
     "slimbot": "^0.7.2",
-    "superagent": "^3.6.0"
+    "superagent": "^3.6.0",
+    "truncate-html": "^0.1.4"
   },
   "devDependencies": {},
   "scripts": {
