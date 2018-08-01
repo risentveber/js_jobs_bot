@@ -1,34 +1,41 @@
 const request = require('superagent');
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
+const { JSDOM } = require('jsdom');
+
 const { getTags } = require('../lib/tagger');
 const { getJobType } = require('../lib/jobType');
 const { render } = require('../lib/render');
 
 function parseItem(item) {
     const splited = item.content.split(/\n<p>|<\/p><p>|<\/p>\n/).filter(i => i);
-    const [
-        title,
-        date,
+    const [, ,
+
         region,
-        salary
+        salary,
     ] = splited;
     return new Promise((resolve, reject) => {
-        request
+        request.agent()
             .get(item.link)
-            .end(function(err, res) {
-                if(err) {
+            .set('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36')
+            .end((err, res) => {
+                if (err) {
                     console.log(err);
                     reject(err);
                     return;
                 }
 
-                const dom = new JSDOM(res.text);
-                const element = dom.window.document.querySelector('.b-vacancy-desc-wrapper, .vacancy-description, .b-vp-content, .tmpl_hh-content, [data-qa=\'vacancy-branded\']');
-                const title = dom.window.document.querySelector('.companyname, .vacancy-company-name').textContent;
-                if (!element) { console.log('error link', item.link)}
+                const { document } = (new JSDOM(res.text)).window;
+                const element = document.querySelector('.b-vacancy-desc-wrapper, .vacancy-description, .b-vp-content, .tmpl_hh-content, [data-qa=\'vacancy-branded\']');
+                const title = document.querySelector('.companyname, .vacancy-company-name').textContent;
+                if (!element) { console.log('error link', item.link); }
                 const pureContent = element.textContent;
-                const tags = getTags(pureContent);
+                const skills = document.querySelectorAll('[data-qa=skills-element]');
+                const tags = getTags(`${pureContent} ${Array.from(skills).map(e => e.textContent).join(' ')}`);
+
+                Array.from(element.querySelectorAll('.vacancy-section')).forEach((e) => {
+                    if (e.querySelector('[data-qa=skills-element]')) {
+                        e.parentNode.removeChild(e);
+                    }
+                });
 
                 resolve(render({
                     title,
@@ -38,8 +45,8 @@ function parseItem(item) {
                     description: element.innerHTML,
                     link: item.link,
                     jobType: getJobType(pureContent),
-                    important: Array.from(element.querySelectorAll('strong')).map(e => e.textContent)
-                }))
+                    important: Array.from(element.querySelectorAll('strong')).map(e => e.textContent),
+                }));
             });
     });
 }
@@ -49,11 +56,11 @@ function getKey(item) {
 }
 
 function isValid() {
-    return true
+    return true;
 }
 
 module.exports = {
     getKey,
     isValid,
-    parseItem
+    parseItem,
 };
