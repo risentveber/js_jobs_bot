@@ -41,7 +41,6 @@ setInterval(() => {
             bot.logMessageToAdmin(err);
             return;
         }
-        console.log('articles hh ============ ', articles.length);
         processFeed(articles, HhAdapter);
     });
 
@@ -51,7 +50,6 @@ setInterval(() => {
             return;
         }
 
-        console.log('articles MM ============ ', articles.length);
         processFeed(articles, MoikrugAdapter);
     });
 }, config.REQUEST_PERIOD_TIME);
