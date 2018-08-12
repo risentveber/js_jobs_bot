@@ -22,7 +22,7 @@ function parseItem(item) {
                 const salaryElem = document.querySelector('.footer_meta .salary');
                 const salary = salaryElem ? salaryElem.textContent : 'Не указана.';
                 const locationElem = document.querySelector('.footer_meta .location');
-                const locationWords = R.propOr('', 'textContent', locationElem).split(', ');
+                const locationWords = R.pathOr('', ['textContent'], locationElem).split(', ');
 
                 const title = document.querySelector('.company_name').textContent;
                 const titleFooter = document.querySelector('.footer_meta').textContent;
