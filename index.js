@@ -1,5 +1,6 @@
 const request = require('superagent');
 const feed = require('feed-read');
+const randomUseragent = require('random-useragent');
 const config = require('./config.json');
 const HhAdapter = require('./adapters/hh');
 const MoikrugAdapter = require('./adapters/moikrug');
@@ -23,6 +24,7 @@ function processFeed(articles, adapter) {
 function getFeed(url, callback) {
     request.agent()
         .get(url)
+        .set('User-Agent', randomUseragent.getRandom())
         .buffer()
         .type('xml')
         .redirects(10)

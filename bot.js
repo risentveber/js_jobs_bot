@@ -18,7 +18,7 @@ function postVacancy(message, link) {
         disable_notification: true,
         reply_markup: JSON.stringify({
             inline_keyboard: [[
-                { text: 'Подробнее', url: link },
+                { text: 'Подробнее', url: `https://xn--90afahb2cse.xn--p1ai/redirect?to=${link}` },
             ]],
         }),
     });
