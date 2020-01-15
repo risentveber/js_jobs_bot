@@ -1,5 +1,5 @@
 const Slimbot = require('slimbot');
-const config = require('./config.json');
+const config = require('./config.json'); // eslint-disable-line
 
 const bot = new Slimbot(config.TELEGRAM_API_KEY);
 

@@ -1,6 +1,6 @@
-package-lock.json
 config.json
 tags
+.idea
 prod-config.json
 node_modules
 .tern-project

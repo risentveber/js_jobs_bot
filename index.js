@@ -1,7 +1,7 @@
 const request = require('superagent');
 const feed = require('feed-read');
 const randomUseragent = require('random-useragent');
-const config = require('./config.json');
+const config = require('./config.json'); // eslint-disable-line
 const HhAdapter = require('./adapters/hh');
 const MoikrugAdapter = require('./adapters/moikrug');
 const bot = require('./bot');
