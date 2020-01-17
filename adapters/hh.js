@@ -5,7 +5,7 @@ const { getTags } = require('../lib/tagger');
 const { getJobType } = require('../lib/jobType');
 const { render } = require('../lib/render');
 
-function parseItem({ link, content = '' }) {
+function parseItem({ link, content = '', title }) {
     const splited = content.split(/\n<p>|<\/p><p>|<\/p>\n/).filter(i => i);
     const [, ,
 
@@ -37,7 +37,7 @@ function parseItem({ link, content = '' }) {
                 }
 
                 const element = document.querySelector('.b-vacancy-desc-wrapper, .vacancy-description, .b-vp-content, .tmpl_hh-content, [data-qa=\'vacancy-branded\']');
-                const title = document.querySelector('.companyname, .vacancy-company-name').textContent;
+                const company = document.querySelector('.companyname, .vacancy-company-name').textContent;
                 if (!element) { console.log('error link', link); }
                 const pureContent = element.textContent;
                 const skills = document.querySelectorAll('[data-qa=skills-element]');
@@ -51,6 +51,7 @@ function parseItem({ link, content = '' }) {
 
                 resolve(render({
                     title,
+                    company,
                     location,
                     salary,
                     tags,
@@ -67,12 +68,8 @@ function getKey(item) {
     return item.link;
 }
 
-function isValid() {
-    return true;
-}
 
 module.exports = {
     getKey,
-    isValid,
     parseItem,
 };

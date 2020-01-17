@@ -24,7 +24,8 @@ function parseItem(item) {
                 const locationElem = document.querySelector('.footer_meta .location');
                 const locationWords = R.pathOr('', ['textContent'], locationElem).split(', ');
 
-                const title = document.querySelector('.company_name').textContent;
+                const company = document.querySelector('.company_name').textContent;
+                const title = document.querySelector('h1.title').textContent;
                 const titleFooter = document.querySelector('.footer_meta').textContent;
                 const pureContent = element.textContent;
 
@@ -32,6 +33,7 @@ function parseItem(item) {
                     tags: getTags(pureContent),
                     salary: `ЗП: ${salary}`,
                     location: locationWords[locationWords.length - 1],
+                    company,
                     title,
                     link: item.link,
                     description: element.innerHTML,
@@ -46,12 +48,8 @@ function getKey(item) {
     return item.link;
 }
 
-function isValid() {
-    return true;
-}
 
 module.exports = {
     getKey,
-    isValid,
     parseItem,
 };

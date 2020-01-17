@@ -5,24 +5,36 @@ const config = require('./config.json'); // eslint-disable-line
 const HhAdapter = require('./adapters/hh');
 const MoikrugAdapter = require('./adapters/moikrug');
 const bot = require('./bot');
-const { FeedItemModel } = require('./lib/models');
 
-function processFeed(articles, adapter) {
-    articles.forEach((article) => {
-        if (adapter.isValid((article))) {
+const { JobsDAO } = require('./lib/jobDAO');
+
+const dao = new JobsDAO(config.DB_FILE);
+
+async function processFeed(articles, adapter) {
+    return Promise.all(
+        articles.map(async (article) => {
             const key = adapter.getKey(article);
-            new FeedItemModel({
-                key,
-                data: article,
-            }).save().then(() => adapter.parseItem(article)
-                .then(res => bot.postVacancy(res, article.link)
-                    .catch(e => console.error(new Date(), e.toString(), res)))).catch(() => {});
-        }
-    });
+            const exists = await dao.checkExistence(key);
+            if (exists) {
+                console.log('exists');
+                return null;
+            }
+
+            try {
+                const res = await adapter.parseItem(article);
+                await bot.postVacancy(res, article.link);
+                await dao.save(key, article);
+            } catch (e) {
+                console.log(e);
+            }
+
+            return null;
+        }),
+    );
 }
 
-function getFeed(url, callback) {
-    request.agent()
+async function getFeed(url) {
+    return new Promise((resolve, reject) => request.agent()
         .get(url)
         .set('User-Agent', randomUseragent.getRandom())
         .buffer()
@@ -30,28 +42,37 @@ function getFeed(url, callback) {
         .redirects(10)
         .end((err, res) => {
             if (err) {
-                callback(err);
+                reject(err);
                 return;
             }
-            feed.rss(res.text, null, callback);
-        });
+
+            feed.rss(res.text, null, (feedErr, articles) => {
+                if (feedErr) {
+                    reject(feedErr);
+                } else {
+                    resolve(articles);
+                }
+            });
+        }));
 }
 
-setInterval(() => {
-    getFeed(config.HH_FEED, (err, articles) => {
-        if (err) {
-            bot.logMessageToAdmin(err);
-            return;
-        }
-        processFeed(articles, HhAdapter);
-    });
+async function checkFeed(feedUrl, adapter) {
+    const articles = await getFeed(feedUrl);
 
-    getFeed(config.MOIKRUG_FEED, (err, articles) => {
-        if (err) {
-            bot.logMessageToAdmin(err);
-            return;
-        }
+    await processFeed(articles, adapter);
+}
 
-        processFeed(articles, MoikrugAdapter);
-    });
-}, config.REQUEST_PERIOD_TIME);
+async function run() {
+    try {
+        await Promise.all([
+            checkFeed(config.HH_FEED, HhAdapter),
+            checkFeed(config.MOIKRUG_FEED, MoikrugAdapter),
+        ]);
+    } catch (err) {
+        console.error(err);
+    }
+
+    setTimeout(run, config.REQUEST_PERIOD_TIME);
+}
+
+run();

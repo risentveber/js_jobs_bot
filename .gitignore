@@ -3,4 +3,5 @@ tags
 .idea
 prod-config.json
 node_modules
+*.sqlite3
 .tern-project

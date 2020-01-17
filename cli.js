@@ -4,7 +4,7 @@ const MoikrugAdapter = require('./adapters/moikrug');
 
 const link = process.argv[2];
 let adapter;
-if (link.includes('moikrug')) {
+if (link.includes('career.habr.com')) {
     adapter = MoikrugAdapter;
 } else if (link.includes('hh')) {
     adapter = HhAdapter;
