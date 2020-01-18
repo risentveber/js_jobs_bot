@@ -12,8 +12,7 @@ function parseItem(item) {
             .get(item.link)
             .end((err, res) => {
                 if (err) {
-                    console.log(err);
-                    reject(err);
+                    reject(new Error(err.toString() + item.link));
                     return;
                 }
 

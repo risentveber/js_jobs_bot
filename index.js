@@ -16,7 +16,6 @@ async function processFeed(articles, adapter) {
             const key = adapter.getKey(article);
             const exists = await dao.checkExistence(key);
             if (exists) {
-                console.log('exists');
                 return null;
             }
 
@@ -25,7 +24,7 @@ async function processFeed(articles, adapter) {
                 await bot.postVacancy(res, article.link);
                 await dao.save(key, article);
             } catch (e) {
-                console.log(e);
+                console.log(e.toString());
             }
 
             return null;
@@ -42,13 +41,13 @@ async function getFeed(url) {
         .redirects(10)
         .end((err, res) => {
             if (err) {
-                reject(err);
+                reject(err.toString());
                 return;
             }
 
             feed.rss(res.text, null, (feedErr, articles) => {
                 if (feedErr) {
-                    reject(feedErr);
+                    reject(feedErr.toString());
                 } else {
                     resolve(articles);
                 }
