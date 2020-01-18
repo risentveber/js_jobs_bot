@@ -1,12 +1,19 @@
-const bot = require('./src/bot');
+const config = require('./config.json'); // eslint-disable-line
 const HhAdapter = require('./src/adapters/hh');
 const MoikrugAdapter = require('./src/adapters/moikrug');
+const { TelegramAPI } = require('./src/bot');
 
-const link = process.argv[2];
-let adapter;
-if (link.includes('career.habr.com')) {
-    adapter = MoikrugAdapter;
-} else if (link.includes('hh')) {
-    adapter = HhAdapter;
+const api = new TelegramAPI(config);
+
+const url = process.argv[2];
+
+async function publishByLink(link, adapter) {
+    const vacancyText = await adapter.parseItem({ link });
+    await api.postVacancy(vacancyText, link);
 }
-adapter.parseItem({ link }).then(data => bot.postVacancy(data, link));
+
+if (url.includes('career.habr.com')) {
+    publishByLink(url, MoikrugAdapter);
+} else if (url.includes('hh')) {
+    publishByLink(url, HhAdapter);
+}

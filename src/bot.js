@@ -1,31 +1,34 @@
 const Slimbot = require('slimbot');
-const config = require('../config.json'); // eslint-disable-line
 
-const bot = new Slimbot(config.TELEGRAM_API_KEY);
+class TelegramAPI extends Slimbot {
+    constructor({ ADMIN_USER, TARGET_CHANNEL, TELEGRAM_API_KEY }) {
+        super(TELEGRAM_API_KEY);
+        this.admin = ADMIN_USER;
+        this.channel = TARGET_CHANNEL;
+    }
 
-function logMessageToAdmin(message, type = 'Error') {
-    bot.sendMessage(config.ADMIN_USER, `<b>${type}</b>\n<code>${message}</code>`, {
-        parse_mode: 'HTML',
-    });
-}
+    async notifyAboutError(err, type = 'Error') {
+        console.error(err.toString());
+        return this.sendMessage(this.admin, `<b>${type}</b>\n<code>${err}</code>`, {
+            parse_mode: 'HTML',
+        });
+    }
 
-async function postVacancy(message, link) {
-    console.log('publish', link);
-    const result = await bot.sendMessage(config.TARGET_CHANNEL, message, {
-        parse_mode: 'HTML',
-        disable_web_page_preview: true,
-        disable_notification: true,
-        reply_markup: JSON.stringify({
-            inline_keyboard: [[
-                { text: 'Подробнее', url: `https://xn--90afahb2cse.xn--p1ai/redirect?to=${link}` },
-            ]],
-        }),
-    });
-    console.log('result', result);
-    return result;
+    async postVacancy(message, link) {
+        // console.log('========================================\npublish', link, '\n', message);
+        return this.sendMessage(this.channel, message, {
+            parse_mode: 'HTML',
+            disable_web_page_preview: true,
+            disable_notification: true,
+            reply_markup: JSON.stringify({
+                inline_keyboard: [[
+                    { text: 'Подробнее', url: `https://xn--90afahb2cse.xn--p1ai/redirect?to=${link}` },
+                ]],
+            }),
+        });
+    }
 }
 
 module.exports = {
-    postVacancy,
-    logMessageToAdmin,
+    TelegramAPI,
 };

@@ -4,11 +4,12 @@ const randomUseragent = require('random-useragent');
 const config = require('./config.json'); // eslint-disable-line
 const HhAdapter = require('./src/adapters/hh');
 const MoikrugAdapter = require('./src/adapters/moikrug');
-const bot = require('./src/bot');
-
-const { JobsDAO } = require('./src/lib/jobDAO');
+const { TelegramAPI } = require('./src/bot');
+const { JobsDAO } = require('./src/jobsDAO');
+const { LoadFeedError, ParseFeedError } = require('./src/errors');
 
 const dao = new JobsDAO(config.DB_FILE);
+const api = new TelegramAPI(config);
 
 async function processFeed(articles, adapter) {
     return Promise.all(
@@ -21,10 +22,10 @@ async function processFeed(articles, adapter) {
 
             try {
                 const res = await adapter.parseItem(article);
-                await bot.postVacancy(res, article.link);
+                await api.postVacancy(res, article.link);
                 await dao.save(key, article);
-            } catch (e) {
-                console.log(e.toString());
+            } catch (err) {
+                api.notifyAboutError(err.toString());
             }
 
             return null;
@@ -32,44 +33,42 @@ async function processFeed(articles, adapter) {
     );
 }
 
-async function getFeed(url) {
-    return new Promise((resolve, reject) => request.agent()
-        .get(url)
-        .set('User-Agent', randomUseragent.getRandom())
-        .buffer()
-        .type('xml')
-        .redirects(10)
-        .end((err, res) => {
-            if (err) {
-                reject(err.toString());
-                return;
-            }
+async function loadAndParseFeed(url) {
+    let response;
+    try {
+        response = await request.agent()
+            .get(url)
+            .set('User-Agent', randomUseragent.getRandom())
+            .buffer()
+            .type('xml')
+            .redirects(10)
+            .then();
+    } catch (err) {
+        throw new LoadFeedError(err);
+    }
 
-            feed.rss(res.text, null, (feedErr, articles) => {
-                if (feedErr) {
-                    reject(feedErr.toString());
-                } else {
-                    resolve(articles);
-                }
-            });
-        }));
+    return new Promise((resolve, reject) => feed.rss(response.text, null, (err, articles) => {
+        if (err) {
+            reject(new ParseFeedError(err));
+        } else {
+            resolve(articles);
+        }
+    }));
 }
 
 async function checkFeed(feedUrl, adapter) {
-    const articles = await getFeed(feedUrl);
+    try {
+        const articles = await loadAndParseFeed(feedUrl);
 
-    await processFeed(articles, adapter);
+        await processFeed(articles, adapter);
+    } catch (err) {
+        await api.notifyAboutError(err.toString());
+    }
 }
 
 async function run() {
-    try {
-        await Promise.all([
-            checkFeed(config.HH_FEED, HhAdapter),
-            checkFeed(config.MOIKRUG_FEED, MoikrugAdapter),
-        ]);
-    } catch (err) {
-        console.error(err);
-    }
+    await checkFeed(config.HH_FEED, HhAdapter);
+    await checkFeed(config.MOIKRUG_FEED, MoikrugAdapter);
 
     setTimeout(run, config.REQUEST_PERIOD_TIME);
 }
