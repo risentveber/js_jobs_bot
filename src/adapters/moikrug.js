@@ -1,12 +1,9 @@
 const R = require('ramda');
 
-const { LoadJobPageDOM } = require('../jobLoader');
 const { getTags, getJobType } = require('../tagger');
 const { render } = require('../render');
 
-async function parseItem({ link }) {
-    const document = await LoadJobPageDOM(link);
-
+function parseItem({ link, document }) {
     const element = document.querySelector('.vacancy_description');
     const salaryElem = document.querySelector('.footer_meta .salary');
     const salary = salaryElem ? salaryElem.textContent : 'Не указана.';

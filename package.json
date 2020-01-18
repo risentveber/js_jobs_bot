@@ -29,10 +29,13 @@
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.13.0",
-    "husky": "^4.0.10"
+    "eslint-plugin-mocha": "^6.2.2",
+    "husky": "^4.0.10",
+    "mocha": "^7.0.0"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "keywords": [
     "js",

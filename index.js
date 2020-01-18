@@ -7,6 +7,7 @@ const MoikrugAdapter = require('./src/adapters/moikrug');
 const { TelegramAPI } = require('./src/bot');
 const { JobsDAO } = require('./src/jobsDAO');
 const { LoadFeedError, ParseFeedError } = require('./src/errors');
+const { LoadJobPageDOM } = require('./src/jobLoader');
 
 const dao = new JobsDAO(config.DB_FILE);
 const api = new TelegramAPI(config);
@@ -21,7 +22,8 @@ async function processFeed(articles, adapter) {
             }
 
             try {
-                const res = await adapter.parseItem(article);
+                const document = await LoadJobPageDOM(article.link);
+                const res = adapter.parseItem({ ...article, document });
                 await api.postVacancy(res, article.link);
                 await dao.save(key, article);
             } catch (err) {

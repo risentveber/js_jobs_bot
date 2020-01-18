@@ -1,14 +1,12 @@
-const { LoadJobPageDOM } = require('../jobLoader');
 const { getTags, getJobType } = require('../tagger');
 const { render } = require('../render');
 
-async function parseItem({ link, content = '', title }) {
+function parseItem({ link, content = '', document }) {
     const splited = content.split(/\n<p>|<\/p><p>|<\/p>\n/).filter(i => i);
     const [, ,
         region,
         salaryData,
     ] = splited;
-    const document = await LoadJobPageDOM(link);
 
     let location;
     let salary;
@@ -30,10 +28,11 @@ async function parseItem({ link, content = '', title }) {
     const tags = getTags(`${pureContent} ${Array.from(skills).map(e => e.textContent).join(' ')}`);
 
     Array.from(element.querySelectorAll('.vacancy-section')).forEach((e) => {
-        if (e.querySelector('[data-qa=skills-element]')) {
+        if (e.querySelector('[data-qa*=skills-element]')) {
             e.parentNode.removeChild(e);
         }
     });
+    const title = document.querySelector('[data-qa=vacancy-title]').textContent;
 
     return render({
         title,

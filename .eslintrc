@@ -7,8 +7,16 @@
   },
   "extends": [
     "eslint:recommended",
-    "airbnb-base"
+    "airbnb-base",
+    "plugin:mocha/recommended"
   ],
+  "plugins": [
+    "mocha"
+  ],
+  "env": {
+    "node": true,
+    "mocha": true
+  },
   "rules": {
     "indent": ["error", 4],
     "no-console": 0,
