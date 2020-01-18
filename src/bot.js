@@ -15,7 +15,6 @@ class TelegramAPI extends Slimbot {
     }
 
     async postVacancy(message, link) {
-        // console.log('========================================\npublish', link, '\n', message);
         return this.sendMessage(this.channel, message, {
             parse_mode: 'HTML',
             disable_web_page_preview: true,
