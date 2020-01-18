@@ -2,11 +2,11 @@ const request = require('superagent');
 const feed = require('feed-read');
 const randomUseragent = require('random-useragent');
 const config = require('./config.json'); // eslint-disable-line
-const HhAdapter = require('./adapters/hh');
-const MoikrugAdapter = require('./adapters/moikrug');
-const bot = require('./bot');
+const HhAdapter = require('./src/adapters/hh');
+const MoikrugAdapter = require('./src/adapters/moikrug');
+const bot = require('./src/bot');
 
-const { JobsDAO } = require('./lib/jobDAO');
+const { JobsDAO } = require('./src/lib/jobDAO');
 
 const dao = new JobsDAO(config.DB_FILE);
 

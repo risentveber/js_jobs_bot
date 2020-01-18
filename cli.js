@@ -1,6 +1,6 @@
-const bot = require('./bot');
-const HhAdapter = require('./adapters/hh');
-const MoikrugAdapter = require('./adapters/moikrug');
+const bot = require('./src/bot');
+const HhAdapter = require('./src/adapters/hh');
+const MoikrugAdapter = require('./src/adapters/moikrug');
 
 const link = process.argv[2];
 let adapter;

@@ -8,7 +8,7 @@
     "url": "git://github.com/risentveber/js_jobs_bot"
   },
   "directories": {
-    "lib": "lib"
+    "lib": "src/lib"
   },
   "dependencies": {
     "az": "^0.2.3",

@@ -1,5 +1,5 @@
 const Az = require('az');
-const namesMap = require('../resources/tagNames.json');
+const namesMap = require('../../resources/tagNames.json');
 
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
