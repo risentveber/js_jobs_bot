@@ -4,7 +4,7 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 
 const HhAdapter = require('../src/adapters/hh');
-// const MoikrugAdapter = require('../src/adapters/moikrug');
+const MoikrugAdapter = require('../src/adapters/moikrug');
 
 function compare(key, adapter) {
     const hhJobHTML = fs.readFileSync(`./test/mocks/${key}.html`, 'utf8');
@@ -16,7 +16,11 @@ function compare(key, adapter) {
 }
 
 describe('Check parsing', () => {
-    it('hh.job', () => {
+    it('hh job', () => {
         compare('hh-35174420', HhAdapter);
+    });
+
+    it('moikrug job', () => {
+        compare('moikrug-1000055472', MoikrugAdapter);
     });
 });

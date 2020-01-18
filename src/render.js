@@ -47,11 +47,13 @@ function render({
     const formattedTags = tags.map(t => `#${t}`).join(' ');
     const locationFormatted = location ? `#${location.replace(/ |-/g, '_')} ` : '';
 
-    return `<b>${title || 'notitle'}</b>
+    const result = `<b>${title || 'notitle'}</b>
 <i>${company.replace(/\n\s*\n/g, '')}</i>
 ${locationFormatted}#${jobType}
 <b>${salary}</b>
 ${formattedTags}\n${formattedDescription}`;
+
+    return result.replace(/\s\s*$/gm, ''); // trim spaces at the end of each line
 }
 
 module.exports = {
