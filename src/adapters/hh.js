@@ -23,6 +23,11 @@ function parseItem({ link, document }) {
             }
         });
 
+    const tel = document.querySelector('a[href*=tel]');
+    if (tel) {
+        tel.parentNode.removeChild(tel);
+    }
+
     return render({
         title,
         company,

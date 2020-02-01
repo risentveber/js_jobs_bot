@@ -18,6 +18,7 @@ function compare(key, adapter) {
 describe('Check parsing', () => {
     it('hh job', () => {
         compare('hh-35174420', HhAdapter);
+        compare('hh-35626760', HhAdapter);
     });
 
     it('moikrug job', () => {

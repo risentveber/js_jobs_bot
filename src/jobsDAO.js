@@ -14,7 +14,15 @@ class JobsDAO {
     }
 
     async save(key, value) {
-        this.db.run('INSERT INTO jobs VALUES (?, ?);', key, JSON.stringify(value), console.log);
+        return new Promise((resolve, reject) => {
+            this.db.run('INSERT INTO jobs VALUES (?, ?);', key, JSON.stringify(value), (err, result) => {
+                if (err) {
+                    reject(new DatabaseError(err));
+                } else {
+                    resolve(result);
+                }
+            });
+        });
     }
 
     async checkExistence(key) {

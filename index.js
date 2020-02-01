@@ -22,10 +22,10 @@ async function processFeed(articles, adapter) {
             }
 
             try {
+                await dao.save(key, article);
                 const document = await LoadJobPageDOM(article.link);
                 const res = adapter.parseItem({ ...article, document });
                 await api.postVacancy(res, article.link);
-                await dao.save(key, article);
             } catch (err) {
                 api.notifyAboutError(err.toString());
             }
