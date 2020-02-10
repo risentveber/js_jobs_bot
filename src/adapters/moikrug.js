@@ -4,15 +4,15 @@ const { getTags, getJobType } = require('../tagger');
 const { render } = require('../render');
 
 function parseItem({ link, document }) {
-    const element = document.querySelector('.vacancy_description');
+    const element = document.querySelector('.job_show_description__body');
     const salaryElem = document.querySelector('.footer_meta .salary');
     const salary = salaryElem ? salaryElem.textContent : 'Не указана.';
     const locationElem = document.querySelector('.footer_meta .location');
     const locationWords = R.pathOr('', ['textContent'], locationElem).split(', ');
 
     const company = document.querySelector('.company_name').textContent;
-    const title = document.querySelector('h1.title').textContent;
-    const titleFooter = document.querySelector('.footer_meta').textContent;
+    const title = document.querySelector('h1').textContent;
+    const titleFooter = document.querySelector('meta[name=description]').textContent;
     const pureContent = element.textContent;
 
     return render({
