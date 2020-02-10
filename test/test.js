@@ -22,6 +22,6 @@ describe('Check parsing', () => {
     });
 
     it('moikrug job', () => {
-        compare('moikrug-1000055472', MoikrugAdapter);
+        compare('moikrug-1000055939', MoikrugAdapter);
     });
 });
